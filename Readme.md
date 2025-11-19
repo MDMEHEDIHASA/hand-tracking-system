@@ -111,8 +111,10 @@ cd backend
 conda activate handtrack  # or: venv\Scripts\activate
 python app.py
 
-# Terminal 2 - Frontend
-cd frontend
+# For Frontend Part to extract click the link below
+[hand-track-ui](https://github.com/MDMEHEDIHASA/hand-track-ui)
+git clone https://github.com/yourusername/hand-track-ui.git
+cd hand-track-ui
 npm start
 
 # Browser automatically opens to http://localhost:3000
