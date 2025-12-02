@@ -2,8 +2,18 @@
 import numpy as np
 import os
 
+# ⬇️ ADDED: Import TensorFlow for loading ML model
+try:
+    import tensorflow as tf
+    from tensorflow.keras.models import load_model
+    TF_AVAILABLE = True
+    print("✅ TensorFlow available for ML-based gesture recognition")
+except ImportError:
+    TF_AVAILABLE = False
+    print("⚠️  TensorFlow not available. Using rule-based recognition only.")
+
 class GestureRecognizer:
-    def __init__(self, model_path='models/gesture_model.h5'):
+    def __init__(self, model_path='models/final_mobilenet_model.h5'):
         self.gestures = [
             'Fist', 'Open_Hand', 'Pointing', 'Peace_Sign', 'Thumbs_Up',
             'OK_Sign', 'Rock', 'Call_Me', 'Thumbs_Down', 'Victory',
@@ -13,10 +23,38 @@ class GestureRecognizer:
         
         # Using rule-based recognition (no ML model needed)
         self.use_ml_model = False
+        self.model_path = model_path
+        # 🔽 THIS IS WHERE MODEL LOADING HAPPENS
+        if TF_AVAILABLE and os.path.exists(model_path):
+            try:
+                print(f"📥 Loading ML model from: {model_path}")
+                self.model = load_model(model_path)
+                self.use_ml_model = True
+                print(f"✅ ML model loaded successfully!")
+                print(f"   Model type: {self.model.__class__.__name__}")
+                print(f"   Input shape: {self.model.input_shape}")
+                print(f"   Output classes: {self.model.output_shape[-1]}")
+            except Exception as e:
+                print(f"⚠️  Failed to load ML model: {e}")
+                print("   Falling back to rule-based recognition")
+                self.use_ml_model = False
+        else:
+            if not TF_AVAILABLE:
+                print("ℹ️  TensorFlow not installed. Using rule-based recognition")
+            elif not os.path.exists(model_path):
+                print(f"ℹ️  Model file not found: {model_path}")
+                print("   Using rule-based gesture recognition")
+            else:
+                print("ℹ️  Using rule-based gesture recognition")
         print("ℹ Using rule-based gesture recognition")
     
     def recognize(self, landmarks):
         """Recognize gesture from landmarks"""
+        # 🔽 THIS DECIDES WHICH METHOD TO USE
+        if self.use_ml_model:
+            return self._ml_recognize(landmarks)
+        else:
+            return self._rule_based_recognize(landmarks)
         return self._rule_based_recognize(landmarks)
     
     def _rule_based_recognize(self, landmarks):
@@ -81,6 +119,54 @@ class GestureRecognizer:
             'fingers_extended': fingers_up,
             'total_fingers': total
         }
+    
+    # 🔽 THIS IS THE ML-BASED RECOGNITION METHOD
+    def _ml_recognize(self, landmarks):
+        """ML-based gesture recognition using trained model"""
+        try:
+            # Extract features from landmarks
+            features = self._extract_features(landmarks)
+            
+            # Reshape for model input: (1, 21, 3) or (1, 63) depending on model
+            if len(self.model.input_shape) == 3:
+                # Model expects (batch, landmarks, coordinates)
+                features = features.reshape(1, 21, 3)
+            else:
+                # Model expects flattened features
+                features = features.reshape(1, -1)
+            
+            # Predict
+            predictions = self.model.predict(features, verbose=0)[0]
+            print("Check prediction ==",predictions)
+            gesture_idx = np.argmax(predictions)
+            confidence = predictions[gesture_idx]
+            
+            # Get gesture name
+            if gesture_idx < len(self.gestures):
+                gesture_name = self.gestures[gesture_idx]
+            else:
+                gesture_name = f'Class_{gesture_idx}'
+            
+            return {
+                'gesture': gesture_name,
+                'confidence': float(confidence),
+                'method': 'ML',
+                'all_predictions': {
+                    self.gestures[i]: float(predictions[i])
+                    for i in range(min(len(self.gestures), len(predictions)))
+                }
+            }
+        except Exception as e:
+            print(f"⚠️  ML recognition failed: {e}")
+            # Fallback to rule-based
+            return self._rule_based_recognize(landmarks)
+    
+    def _extract_features(self, landmarks):
+        """Extract feature vector from landmarks"""
+        features = []
+        for landmark in landmarks:
+            features.extend([landmark['x'], landmark['y'], landmark['z']])
+        return np.array(features, dtype=np.float32)
     
     def _count_fingers(self, landmarks):
         """Count extended fingers"""

@@ -33,9 +33,9 @@ is_recording = False
 class VideoCamera:
     def __init__(self):
         self.camera = cv2.VideoCapture(0)
-        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-        self.camera.set(cv2.CAP_PROP_FPS, 30)
+        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+        self.camera.set(cv2.CAP_PROP_FPS, 60)
         
     def __del__(self):
         if self.camera:

@@ -101,8 +101,8 @@ pip install -r requirements.txt
 # For Frontend Part to extract click the link below
 git clone https://github.com/yourusername/hand-track-ui.git
 cd hand-track-ui
-npm start
-cd frontend
+npm install
+npm run dev
 
 # Install dependencies
 npm install
