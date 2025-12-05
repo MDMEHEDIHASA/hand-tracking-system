@@ -61,7 +61,7 @@ A real-time hand tracking and gesture recognition system using **MediaPipe**, **
 Before you begin, ensure you have:
 
 - **Python 3.11** (3.8-3.11 supported, NOT 3.12+)
-- **Node.js 16+** and npm
+- **Node.js 20+** and npm
 - **Webcam** (built-in or USB)
 - **Git** (optional)
 
