@@ -30,6 +30,9 @@ A real-time hand tracking and gesture recognition system using **MediaPipe**, **
 
 ---
 
+### 🔧 **Dataset**
+[Dataset](https://www.kaggle.com/datasets/grassknoted/asl-alphabet)
+
 ## 📸 Screenshots
 
 ### Main Interface
