@@ -275,11 +275,15 @@ The system works with **rule-based gesture recognition** by default. For better 
 ```bash
 cd backend
 
-# Option A: Download from Kaggle (Recommended)
+# Option A: Use Google drive to download the dataset
+
+### [download-dataset-from-drive](https://drive.google.com/drive/folders/1ist6j5F78ag5HGfiQ_yXFRLJwUydD_VM?usp=sharing)
+
+# Option B: Download from Kaggle (Recommended)
 # Go to: https://www.kaggle.com/datasets/grassknoted/asl-alphabet
 # Download and extract to 'dataset' folder
 
-# Option B: Use download helper
+# Option C: Use download helper
 python download_dataset.py
 ```
 
