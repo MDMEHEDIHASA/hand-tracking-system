@@ -272,12 +272,15 @@ curl -X POST http://localhost:5000/api/stop
 The system works with **rule-based gesture recognition** by default. For better accuracy (95%+), train a custom ML model:
 
 ### Step 1: Download Dataset
-```bash
-cd backend
 
 # Option A: Use Google drive to download the dataset
 
-### [download-dataset-from-drive](https://drive.google.com/drive/folders/1ist6j5F78ag5HGfiQ_yXFRLJwUydD_VM?usp=sharing)
+### [download-dataset-from-google-drive](https://drive.google.com/drive/folders/1ist6j5F78ag5HGfiQ_yXFRLJwUydD_VM?usp=sharing)
+
+```bash
+cd backend
+
+
 
 # Option B: Download from Kaggle (Recommended)
 # Go to: https://www.kaggle.com/datasets/grassknoted/asl-alphabet
